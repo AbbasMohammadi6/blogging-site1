@@ -10,7 +10,8 @@
   "dependencies": {
     "next": "10.0.9",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "suneditor-react": "^2.16.1"
   },
   "devDependencies": {
     "@types/node": "^14.14.37",
