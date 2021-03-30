@@ -8,9 +8,9 @@ import "suneditor/dist/css/suneditor.min.css";
 export default function Home() {
   const [editorContent, setEditorContent] = useState("");
 
-  useEffect(() => {
-    console.log(editorContent);
-  }, [editorContent]);
+  const handlePost = (): void => {
+    console.log(typeof editorContent);
+  };
 
   return (
     <>
@@ -20,11 +20,12 @@ export default function Home() {
         autoFocus={true}
         setOptions={{
           height: 200,
-          buttonList: buttonList.complex, // Or Array of button list, eg. [['font', 'align'], ['image']]
-          // Other option
+          buttonList: buttonList.complex,
         }}
         onChange={(content) => setEditorContent(content)}
       />
+
+      <button onClick={handlePost}>POST</button>
     </>
   );
 }
