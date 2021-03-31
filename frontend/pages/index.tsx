@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
+import axios from "axios";
 
 import SunEditor, { buttonList } from "suneditor-react";
 import "suneditor/dist/css/suneditor.min.css";
@@ -9,7 +10,18 @@ export default function Home() {
   const [editorContent, setEditorContent] = useState("");
 
   const handlePost = (): void => {
-    console.log(typeof editorContent);
+    (async function addPost() {
+      try {
+        const { data } = await axios.post(
+          "/api/posts",
+          { body: editorContent },
+          { headers: { "Content-Type": "application/json" } }
+        );
+        console.log(data);
+      } catch (error) {
+        console.log(error.response.data);
+      }
+    })();
   };
 
   return (

@@ -28,14 +28,18 @@ const postSchema: Schema = new Schema(
 
 const Post: Model<IPost> = model("Post", postSchema);
 
-(async function () {
-	const post: IPost = await Post.create({ body: "<h1>another test post</h1>" });
+// (async function () {
+// 	const post: IPost = await Post.create({ body: "<h1>another test post</h1>" });
 
-	console.log(post);
-})();
+// 	console.log(post);
+// })();
 
-app.post("/post", (req, res) => {
+app.post("/api/post", async (req, res) => {
 	// for now we just save the body, not title or anything else
+
+	const { body } = req.body;
+
+	const post: IPost = await Post.create({ body });
 });
 
 app.listen(5000, () =>
