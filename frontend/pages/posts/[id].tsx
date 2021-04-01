@@ -4,7 +4,6 @@ import { GetStaticPaths, GetStaticProps } from "next";
 import htmr from "htmr";
 
 export default function PostScreen({ body }: { body: string }) {
-	console.log(body);
 	return htmr(body);
 }
 
@@ -14,11 +13,12 @@ export const getStaticPaths: GetStaticPaths = async () => {
 	const paths = posts.map((post) => {
 		return {
 			params: {
+				// I expected post._id to be a string but it was an object???
 				id: post._id.toString(),
 			},
 		};
 	});
-	console.log(paths);
+
 	return {
 		paths,
 		fallback: false,
@@ -31,6 +31,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 	try {
 		post = await Post.findById(params.id as string);
 	} catch (error) {
+		/** Todo: show this error in the UI maybe??? **/
 		console.log(error);
 	}
 

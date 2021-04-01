@@ -6,6 +6,9 @@ import axios from "axios";
 import SunEditor, { buttonList } from "suneditor-react";
 import "suneditor/dist/css/suneditor.min.css";
 
+import Link from "next/link";
+// 60649fcb0f5e0d1000424429
+
 export default function Home() {
   const [editorContent, setEditorContent] = useState("");
 
@@ -38,6 +41,10 @@ export default function Home() {
       />
 
       <button onClick={handlePost}>POST</button>
+
+      <Link href="/Counter">
+        <a>Counter</a>
+      </Link>
     </>
   );
 }
