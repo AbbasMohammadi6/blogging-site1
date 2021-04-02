@@ -1,9 +1,17 @@
+import React, { ComponentType } from "react";
 import "../styles/globals.css";
 import { Provider } from "react-redux";
-import { useStore } from "../store";
+import store from "../store";
+import { AppInitialProps } from "next/app";
 
-function MyApp({ Component, pageProps }) {
-	const store = useStore(pageProps.initialReduxState);
+function MyApp({
+	Component,
+	pageProps,
+}: {
+	Component: ComponentType<AppInitialProps>;
+	pageProps: AppInitialProps;
+}) {
+	// const store = useStore(pageProps.initialReduxState);
 
 	return (
 		<Provider store={store}>
