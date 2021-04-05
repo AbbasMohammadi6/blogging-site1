@@ -17,6 +17,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 					.status(400)
 					.json({ message: "name, email and password are required" });
 
+			/** Todo: hash passwords later **/
+
 			try {
 				if (await User.findOne({ email }))
 					return res.status(400).json({ message: "Email aleady exists" });

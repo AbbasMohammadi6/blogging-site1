@@ -7,12 +7,6 @@ interface UserRegisterState {
 	error: any; // CHANGE THIS LATER
 }
 
-interface Action {
-	type: string;
-	payload?: string;
-	error?: string;
-}
-
 interface Data {
 	user: {
 		name: string;
@@ -89,13 +83,5 @@ export const registerUser = (user: {
 		dispatch(failUserRegister(e.response.data.message));
 	}
 };
-
-// {
-// 	loading: false,
-// 	userInfo: { user: { name: "", email: "" }, token: "" },
-// 	error: "",
-// };
-
-// data: { user: userWithoutPassword, token: user.generateToken() }
 
 export default registerSlice.reducer;

@@ -4,7 +4,12 @@ import styles from "styles/Header.module.scss";
 
 const Header = () => {
 	const userRegister = useAppSelector((state) => state.userRegister);
-	const { userInfo } = userRegister;
+	const { userInfo: registerUserInfo } = userRegister;
+
+	const userLogin = useAppSelector((state) => state.userLogin);
+	const { userInfo: loginUserInfo } = userLogin;
+
+	const name = loginUserInfo.user.name || registerUserInfo.user.name;
 
 	return (
 		<header className={styles.header}>
@@ -13,12 +18,18 @@ const Header = () => {
 			</Link>
 
 			<div className={styles.name}>
-				{userInfo.user.name ? (
-					userInfo.user.name
+				{name ? (
+					name
 				) : (
-					<Link href="/register">
-						<a>Register</a>
-					</Link>
+					<>
+						<Link href="/register">
+							<a>Register</a>
+						</Link>
+
+						<Link href="/login">
+							<a>Login</a>
+						</Link>
+					</>
 				)}
 			</div>
 		</header>
