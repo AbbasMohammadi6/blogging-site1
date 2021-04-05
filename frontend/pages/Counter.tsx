@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 // import { increment, decrement, reset } from "../actions/actions";
 import Link from "next/link";
-import { useAppDispatch, useAppSelector } from "../utils/hooks";
+import { useAppDispatch, useAppSelector } from "utils/hooks";
 import {
 	increment,
 	decrement,

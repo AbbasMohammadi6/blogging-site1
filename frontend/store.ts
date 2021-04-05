@@ -1,10 +1,25 @@
 import { configureStore } from "@reduxjs/toolkit";
-import counterReducer from "./slices/counterSlice";
+import counterReducer from "slices/counterSlice";
+import userRegisterReducer from "slices/registerSlice";
+
+let preloadedState = {
+	userRegister: { userInfo: { user: { name: "", email: "" }, token: "" } },
+};
+
+if (typeof window !== "undefined") {
+	preloadedState = {
+		userRegister: localStorage.getItem("userRegister")
+			? JSON.parse(localStorage.getItem("userRegister"))
+			: { userInfo: { user: { name: "", email: "" }, token: "" } },
+	};
+}
 
 const store = configureStore({
-  reducer: {
-    counter: counterReducer,
-  },
+	preloadedState,
+	reducer: {
+		counter: counterReducer,
+		userRegister: userRegisterReducer,
+	},
 });
 
 export type RootState = ReturnType<typeof store.getState>;

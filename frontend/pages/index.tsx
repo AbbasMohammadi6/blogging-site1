@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import Head from "next/head";
-import styles from "../styles/Home.module.css";
 import axios from "axios";
+import { useAppDispatch, useAppSelector } from "utils/hooks";
+import Header from "components/Header";
 
 import SunEditor, { buttonList } from "suneditor-react";
 import "suneditor/dist/css/suneditor.min.css";
@@ -10,41 +11,56 @@ import Link from "next/link";
 // 60649fcb0f5e0d1000424429
 
 export default function Home() {
-  const [editorContent, setEditorContent] = useState("");
+	const [editorContent, setEditorContent] = useState("");
 
-  const handlePost = (): void => {
-    (async function addPost() {
-      try {
-        const { data } = await axios.post(
-          "/api/posts",
-          { body: editorContent },
-          { headers: { "Content-Type": "application/json" } }
-        );
-        console.log(data);
-      } catch (error) {
-        console.log(error.response.data);
-      }
-    })();
-  };
+	const userRegister = useAppSelector((state) => state.userRegister);
+	const { loading, error, userInfo } = userRegister;
 
-  return (
-    <>
-      <SunEditor
-        defaultValue='<div><p>some <span style="background: yellow">text</span></p><h1 style="color: palevioletred">heading</h1></div>'
-        placeholder="Please type here..."
-        autoFocus={true}
-        setOptions={{
-          height: 200,
-          buttonList: buttonList.complex,
-        }}
-        onChange={(content) => setEditorContent(content)}
-      />
+	const handlePost = (): void => {
+		(async function addPost() {
+			try {
+				const { data } = await axios.post(
+					"/api/posts",
+					{ body: editorContent },
+					{ headers: { "Content-Type": "application/json" } }
+				);
 
-      <button onClick={handlePost}>POST</button>
+				console.log(data);
+			} catch (error) {
+				console.log(error.response.data);
+			}
+		})();
+	};
 
-      <Link href="/Counter">
-        <a>Counter</a>
-      </Link>
-    </>
-  );
+	return (
+		<>
+			<Header />
+			<SunEditor
+				defaultValue='<div><p>some <span style="background: yellow">text</span></p><h1 style="color: palevioletred">heading</h1></div>'
+				placeholder="Please type here..."
+				autoFocus={true}
+				setOptions={{
+					height: 200,
+					buttonList: buttonList.complex,
+				}}
+				onChange={(content) => setEditorContent(content)}
+			/>
+
+			<button onClick={handlePost}>POST</button>
+
+			<Link href="/Counter">
+				<a>Counter</a>
+			</Link>
+
+			<Link href="/register">
+				<a>register</a>
+			</Link>
+
+			<Link href="/posts">
+				<a>posts</a>
+			</Link>
+
+			{userInfo.user.name && <h1>THis User is anthenticated</h1>}
+		</>
+	);
 }
