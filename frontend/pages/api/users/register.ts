@@ -1,5 +1,5 @@
 import User, { IUser } from "models/userModel";
-import { NextApiRequest, NextApiResponse } from "next/";
+import { NextApiRequest, NextApiResponse } from "next";
 import dbConnect from "utils/dbConnect";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
@@ -24,7 +24,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 					return res.status(400).json({ message: "Email aleady exists" });
 
 				const user = await User.create({ name, email, password });
-
+				console.log(user);
 				const userWithoutPassword = { name: user.name, email: user.email };
 
 				return res

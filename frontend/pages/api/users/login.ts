@@ -22,7 +22,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
 				if (!user) return res.status(404).json({ message: "User not found" });
 
-				if (user.password !== password)
+				if (!(await user.checkPassword(password)))
 					return res.status(401).json({ message: "Unable to login" });
 
 				const userWithoutPassword = { name: user.name, email: user.email };
