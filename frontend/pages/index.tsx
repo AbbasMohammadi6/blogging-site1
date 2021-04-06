@@ -6,6 +6,7 @@ import SunEditor, { buttonList } from "suneditor-react";
 import { useAppDispatch, useAppSelector } from "utils/hooks";
 import Header from "components/Header";
 import { createPost } from "slices/createPostSlice";
+import { getPosts } from "slices/getPostsSlice";
 import "suneditor/dist/css/suneditor.min.css";
 
 export default function Home() {
@@ -26,6 +27,10 @@ export default function Home() {
 	const handlePost = (): void => {
 		dispatch(createPost({ title, body: editorContent }));
 	};
+
+	useEffect(() => {
+		dispatch(getPosts());
+	});
 
 	return (
 		<>
