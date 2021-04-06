@@ -24,12 +24,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 					return res.status(400).json({ message: "Email aleady exists" });
 
 				const user = await User.create({ name, email, password });
-				console.log(user);
-				const userWithoutPassword = { name: user.name, email: user.email };
 
-				return res
-					.status(201)
-					.json({ user: userWithoutPassword, token: user.generateToken() });
+				return res.status(201).json({ user, token: user.generateToken() });
 			} catch (e) {
 				console.log(e);
 				return res.status(400).json(e);

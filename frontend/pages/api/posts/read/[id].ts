@@ -1,9 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import Post, { IPost } from "models/postModel";
 import dbConnect from "utils/dbConnect";
-import withProtect from "utils/withProtect";
 
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+export default async (req: NextApiRequest, res: NextApiResponse) => {
 	const {
 		method,
 		query: { id },
@@ -12,11 +11,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 	await dbConnect();
 
 	switch (method) {
-		case "POST":
+		case "GET":
 			try {
-				// const post = await Post.create();
+				const post = await Post.findById(id);
+				if (!post) res.status(404).json({ message: "Post not found" });
+				else res.json(post);
 			} catch (error) {
-				res.status(500);
+				res.status(500).json({ message: "Server error, try again later." });
 			}
 			break;
 
@@ -25,5 +26,3 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 			break;
 	}
 };
-
-export default withProtect(handler);

@@ -1,40 +1,45 @@
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import Head from "next/head";
 import axios from "axios";
+import SunEditor, { buttonList } from "suneditor-react";
 import { useAppDispatch, useAppSelector } from "utils/hooks";
 import Header from "components/Header";
-
-import SunEditor, { buttonList } from "suneditor-react";
+import { createPost } from "slices/createPostSlice";
 import "suneditor/dist/css/suneditor.min.css";
-
-import Link from "next/link";
-// 60649fcb0f5e0d1000424429
 
 export default function Home() {
 	const [editorContent, setEditorContent] = useState("");
+	const [title, setTitle] = useState("");
+
+	const dispatch = useAppDispatch();
 
 	const userRegister = useAppSelector((state) => state.userRegister);
 	const { loading, error, userInfo } = userRegister;
 
-	const handlePost = (): void => {
-		(async function addPost() {
-			try {
-				const { data } = await axios.post(
-					"/api/posts",
-					{ body: editorContent },
-					{ headers: { "Content-Type": "application/json" } }
-				);
+	const {
+		loading: postCreateLoading,
+		error: postCreateError,
+		data,
+	} = useAppSelector((state) => state.postCreate);
 
-				console.log(data);
-			} catch (error) {
-				console.log(error.response.data);
-			}
-		})();
+	const handlePost = (): void => {
+		dispatch(createPost({ title, body: editorContent }));
 	};
 
 	return (
 		<>
 			<Header />
+
+			{postCreateLoading ? <h1>Loading...</h1> : error ? <h1>{error}</h1> : ""}
+
+			<input
+				type="text"
+				placeholder="Enter the title here"
+				value={title}
+				onChange={(e) => setTitle(e.target.value)}
+			/>
+
 			<SunEditor
 				defaultValue='<div><p>some <span style="background: yellow">text</span></p><h1 style="color: palevioletred">heading</h1></div>'
 				placeholder="Please type here..."
@@ -47,20 +52,6 @@ export default function Home() {
 			/>
 
 			<button onClick={handlePost}>POST</button>
-
-			<Link href="/Counter">
-				<a>Counter</a>
-			</Link>
-
-			<Link href="/register">
-				<a>register</a>
-			</Link>
-
-			<Link href="/posts">
-				<a>posts</a>
-			</Link>
-
-			{userInfo.user.name && <h1>THis User is anthenticated</h1>}
 		</>
 	);
 }

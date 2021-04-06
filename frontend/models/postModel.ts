@@ -2,12 +2,24 @@ import { Schema, model, Document, Model, models } from "mongoose";
 
 export interface IPost extends Document {
 	body: string;
+	owner: typeof Schema.Types.ObjectId;
 }
 
 const postSchema: Schema = new Schema(
 	{
+		title: {
+			type: String,
+			required: true,
+		},
+
 		body: {
 			type: String,
+			required: true,
+		},
+
+		owner: {
+			type: Schema.Types.ObjectId,
+			ref: "User",
 			required: true,
 		},
 	},

@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import counterReducer from "slices/counterSlice";
 import userRegisterReducer from "slices/registerSlice";
 import userLogingReducer from "slices/loginSlice";
+import postCreateReducer from "slices/createPostSlice";
 
 let preloadedState = {
 	userRegister: { userInfo: { user: { name: "", email: "" }, token: "" } },
@@ -21,6 +22,7 @@ const store = configureStore({
 		counter: counterReducer,
 		userRegister: userRegisterReducer,
 		userLogin: userLogingReducer,
+		postCreate: postCreateReducer,
 	},
 });
 
