@@ -19,7 +19,14 @@ const Header = () => {
 
 			<div className={styles.name}>
 				{name ? (
-					name
+					<div>
+						{name}
+						{"   "}
+
+						<Link href="/createpost">
+							<a>Create a Post</a>
+						</Link>
+					</div>
 				) : (
 					<>
 						<Link href="/register">

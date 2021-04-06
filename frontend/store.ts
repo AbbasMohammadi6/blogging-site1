@@ -3,6 +3,7 @@ import counterReducer from "slices/counterSlice";
 import userRegisterReducer from "slices/registerSlice";
 import userLogingReducer from "slices/loginSlice";
 import postCreateReducer from "slices/createPostSlice";
+import postsGetReducer from "slices/getPostsSlice";
 
 let preloadedState = {
 	userRegister: { userInfo: { user: { name: "", email: "" }, token: "" } },
@@ -23,6 +24,7 @@ const store = configureStore({
 		userRegister: userRegisterReducer,
 		userLogin: userLogingReducer,
 		postCreate: postCreateReducer,
+		postsGet: postsGetReducer,
 	},
 });
 
