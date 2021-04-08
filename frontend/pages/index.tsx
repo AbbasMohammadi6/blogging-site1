@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { FC, useState, useEffect } from "react";
 import Link from "next/link";
 import Head from "next/head";
 import { GetStaticProps } from "next";
@@ -9,6 +9,7 @@ import { createPost } from "slices/createPostSlice";
 import { getPosts } from "slices/getPostsSlice";
 import dbConnect from "utils/dbConnect";
 import Post, { IPost } from "models/postModel";
+import { getFiftyWords } from "utils/helpers";
 
 export default function Home({
 	posts,
@@ -20,28 +21,42 @@ export default function Home({
 	return (
 		<>
 			<Header />
+			{error ? (
+				<h1>{error}</h1>
+			) : (
+				<section>
+					{posts.map((article, idx) => (
+						<div key={idx}>
+							<Link href={`/posts/${article._id}`}>
+								<a>
+									<h1>{article.title}</h1>
+								</a>
+							</Link>
 
-			<section>
-				{posts.map((article, idx) => (
-					<div key={idx}>
-						<Link href={`/posts/${article._id}`}>
-							<a>
-								<h1>{article.title}</h1>
-							</a>
-						</Link>
-						<div>{htmr(article.body)}</div>
-					</div>
-				))}
-			</section>
+							<small>
+								Written By: {/* @ts-ignore */}
+								<Link href={`/users/${article.owner._id}`}>
+									<a>{article.owner.name}</a>
+								</Link>{" "}
+								at {article.createdAt}
+							</small>
+
+							<div>{htmr(getFiftyWords(article.body))}</div>
+						</div>
+					))}
+				</section>
+			)}
 		</>
 	);
 }
 
+/** Todo: change this to server side rendering instead of static generation **/
 export const getStaticProps: GetStaticProps = async () => {
 	await dbConnect();
 
 	try {
-		const posts: IPost[] = await Post.find({});
+		// by doing "name email", we are saying that we don't want the it to send the password
+		const posts: IPost[] = await Post.find({}).populate("owner", "name email");
 
 		// If I send the posts array, nextjs will throw an error,
 		// saying that it's not serializable
@@ -51,6 +66,13 @@ export const getStaticProps: GetStaticProps = async () => {
 				title: post.title,
 				body: post.body,
 				_id: post._id.toString(),
+				createdAt: post.createdAt.toString().substring(4, 15),
+				owner: {
+					name: post.owner.name,
+					// Do ts-ignore, because in the IPost interface _id is of type objectId, but here I poulated it with name and _id
+					// @ts-ignore
+					_id: post.owner._id.toString(),
+				},
 			};
 		});
 
@@ -61,6 +83,7 @@ export const getStaticProps: GetStaticProps = async () => {
 			},
 		};
 	} catch (e) {
+		console.log(e);
 		return {
 			props: {
 				posts: [],

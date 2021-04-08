@@ -6,6 +6,7 @@ export interface IUser extends Document {
   name: string;
   email: string;
   password: string;
+  posts: typeof Schema.Types.ObjectId[];
   generateToken: () => string;
   checkPassword: (password: string) => Promise<boolean>;
 }
@@ -26,6 +27,13 @@ const userSchema: Schema = new Schema({
     type: String,
     required: true,
   },
+
+  posts: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Post",
+    },
+  ],
 });
 
 userSchema.methods.generateToken = function () {
@@ -54,6 +62,7 @@ userSchema.methods.toJSON = function () {
   const user = this as any;
   const userObject = user.toObject();
   delete userObject.password;
+
   return userObject;
 };
 

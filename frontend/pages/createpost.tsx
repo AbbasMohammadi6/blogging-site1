@@ -5,7 +5,6 @@ import "suneditor/dist/css/suneditor.min.css";
 import { createPost } from "slices/createPostSlice";
 import { useAppDispatch, useAppSelector } from "utils/hooks";
 import Header from "components/Header";
-import withAuth from "utils/withAuth";
 
 const addPost = () => {
 	const [editorContent, setEditorContent] = useState("");

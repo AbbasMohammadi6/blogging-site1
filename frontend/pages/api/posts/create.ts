@@ -23,6 +23,8 @@ const handler = async (
 
 			try {
 				const post: IPost = await Post.create({ title, body, owner: user._id });
+				user.posts.push(post._id);
+				await user.save();
 
 				return res.status(201).json(post);
 			} catch (e) {

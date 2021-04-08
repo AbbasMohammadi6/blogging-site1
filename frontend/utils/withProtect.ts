@@ -17,7 +17,6 @@ const withProtect = (handler) => {
 		const decoded: any = jwt.verify(token, process.env.JWT_SECRET);
 
 		try {
-			console.log(decoded);
 			const user = await User.findById(decoded.id);
 			if (!user) return res.status(404).json({ message: "User doesn't exits" });
 

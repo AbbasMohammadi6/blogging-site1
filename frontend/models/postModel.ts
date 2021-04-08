@@ -4,6 +4,7 @@ export interface IPost extends Document {
 	title: string;
 	body: string;
 	owner: typeof Schema.Types.ObjectId;
+	createdAt: Date;
 }
 
 const postSchema: Schema = new Schema(
