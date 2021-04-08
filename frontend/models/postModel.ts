@@ -1,6 +1,7 @@
 import { Schema, model, Document, Model, models } from "mongoose";
 
 export interface IPost extends Document {
+	title: string;
 	body: string;
 	owner: typeof Schema.Types.ObjectId;
 }

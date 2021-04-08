@@ -1,10 +1,30 @@
-import Post, { IPost } from "../../models/postModel";
-import dbConnect from "../../utils/dbConnect";
 import { GetStaticPaths, GetStaticProps } from "next";
 import htmr from "htmr";
+import Post, { IPost } from "models/postModel";
+import dbConnect from "utils/dbConnect";
+import Header from "components/Header";
+import { useAppSelector } from "utils/hooks";
 
-export default function PostScreen({ body }: { body: string }) {
-	return htmr(body);
+export default function PostScreen({
+	body,
+	title,
+}: {
+	body: string;
+	title: string;
+}) {
+	const {
+		userInfo: { token, user },
+	} = useAppSelector((state) => state.userRegister);
+
+	console.log(user);
+
+	return (
+		<>
+			<Header />
+			<h1>{title}</h1>
+			<div>{htmr(body)}</div>
+		</>
+	);
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -27,7 +47,9 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
 	await dbConnect();
+
 	let post: IPost;
+
 	try {
 		post = await Post.findById(params.id as string);
 	} catch (error) {
@@ -38,6 +60,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 	return {
 		props: {
 			body: post.body,
+			title: post.title,
 		},
 	};
 };

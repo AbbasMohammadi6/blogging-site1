@@ -11,8 +11,6 @@ function MyApp({
 	Component: ComponentType<AppInitialProps>;
 	pageProps: AppInitialProps;
 }) {
-	// const store = useStore(pageProps.initialReduxState);
-
 	return (
 		<Provider store={store}>
 			<Component {...pageProps} />

@@ -5,6 +5,7 @@ import "suneditor/dist/css/suneditor.min.css";
 import { createPost } from "slices/createPostSlice";
 import { useAppDispatch, useAppSelector } from "utils/hooks";
 import Header from "components/Header";
+import withAuth from "utils/withAuth";
 
 const addPost = () => {
 	const [editorContent, setEditorContent] = useState("");
@@ -22,14 +23,14 @@ const addPost = () => {
 		dispatch(createPost({ title, body: editorContent }));
 	};
 
-	useEffect(() => {
-		if (!user.name) Router.push("/");
-	});
+	if (typeof window !== "undefined" && !user.name) Router.push("/");
 
 	return (
 		<>
 			<Header />
 			{loading ? <h1>Loading...</h1> : error ? <h1>{error}</h1> : ""}
+
+			{user.name && user.name}
 
 			<input
 				type="text"

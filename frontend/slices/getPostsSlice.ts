@@ -7,6 +7,7 @@ type Data = {
 	owner: string;
 	createdAt: string;
 	updatedAt: string;
+	_id: string;
 }[];
 
 interface State {
