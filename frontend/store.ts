@@ -4,6 +4,7 @@ import userRegisterReducer from "slices/registerSlice";
 import userLogingReducer from "slices/loginSlice";
 import postCreateReducer from "slices/createPostSlice";
 import postsGetReducer from "slices/getPostsSlice";
+import addCommentReducer from "slices/addCommentSlice";
 
 let preloadedState = {
 	userRegister: { userInfo: { user: { name: "", email: "" }, token: "" } },
@@ -25,6 +26,7 @@ const store = configureStore({
 		userLogin: userLogingReducer,
 		postCreate: postCreateReducer,
 		postsGet: postsGetReducer,
+		addComment: addCommentReducer,
 	},
 });
 

@@ -1,11 +1,36 @@
 import { Schema, model, Document, Model, models } from "mongoose";
 
+// export interface IComment extends Document {
+// 	text: string;
+// 	owner: typeof Schema.Types.ObjectId;
+// }
+
 export interface IPost extends Document {
 	title: string;
 	body: string;
 	owner: typeof Schema.Types.ObjectId;
 	createdAt: Date;
+	comments: Array<any>;
 }
+
+/**Todo: Do I need a interface for this???**/
+const commentSchema: Schema = new Schema(
+	{
+		text: {
+			type: String,
+			required: true,
+		},
+
+		owner: {
+			type: Schema.Types.ObjectId,
+			ref: "User",
+			required: true,
+		},
+	},
+	{
+		timestamps: true,
+	}
+);
 
 const postSchema: Schema = new Schema(
 	{
@@ -24,6 +49,8 @@ const postSchema: Schema = new Schema(
 			ref: "User",
 			required: true,
 		},
+
+		comments: [commentSchema],
 	},
 	{
 		timestamps: true,
