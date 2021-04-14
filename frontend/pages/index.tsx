@@ -21,6 +21,8 @@ export default function Home({
 	posts: IPost[];
 	error: string;
 }) {
+	const { isDark } = useAppSelector((state) => state.theme);
+
 	function getDate(date: any) {
 		return new Date(date).toLocaleDateString("fa", {
 			month: "long",
@@ -32,35 +34,37 @@ export default function Home({
 	return (
 		<>
 			<Header />
-			{error ? (
-				<h1>{error}</h1>
-			) : (
-				<Layout>
-					{posts.map((article, idx) => (
-						<div className={styles.card} key={idx}>
-							<Link href={`/posts/${article._id}`}>
-								<a>
-									<h1>{article.title}</h1>
-								</a>
-							</Link>
+			<Layout>
+				{error ? (
+					<h1>{error}</h1>
+				) : (
+					<>
+						{posts.map((article, idx) => (
+							<div className={styles.card} key={idx}>
+								<Link href={`/posts/${article._id}`}>
+									<a>
+										<h1>{article.title}</h1>
+									</a>
+								</Link>
 
-							<small>
-								نویسنده: {/* @ts-ignore */}
-								<Link href={`/users/${article.owner._id}`}>
-									<a>{article.owner.name}</a>
-								</Link>{" "}
-								{/*Todo: Fix this later*/}
-								{/*@ts-ignore*/}
-								در {getDate(article.createdAt)}
-							</small>
+								<small>
+									نویسنده: {/* @ts-ignore */}
+									<Link href={`/users/${article.owner._id}`}>
+										<a>{article.owner.name}</a>
+									</Link>{" "}
+									{/*Todo: Fix this later*/}
+									{/*@ts-ignore*/}
+									در {getDate(article.createdAt)}
+								</small>
 
-							<div className={styles.main}>
-								{htmr(getFirstImgAndPar(article.body))}
+								<div className={styles.main}>
+									{htmr(getFirstImgAndPar(article.body))}
+								</div>
 							</div>
-						</div>
-					))}
-				</Layout>
-			)}
+						))}
+					</>
+				)}
+			</Layout>
 		</>
 	);
 }
