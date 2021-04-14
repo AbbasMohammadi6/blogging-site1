@@ -1,0 +1,30 @@
+.main {
+}
+
+.card {
+	padding: 1rem 2rem 2rem;
+	border-bottom: 1px solid #ccc;
+
+	& img {
+		display: block;
+		margin: auto;
+		width: 80%;
+	}
+
+	& h1 {
+		margin-bottom: 1.5rem;
+	}
+
+	& p {
+		margin: 1rem 0;
+		line-height: 2rem;
+	}
+
+	& a {
+		transition: color 100ms;
+
+		&:hover {
+			color: steelblue;
+		}
+	}
+}

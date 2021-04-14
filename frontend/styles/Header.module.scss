@@ -1,23 +1,36 @@
 .header {
 	height: 10vh;
-	background: pink;
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
+
 	padding: 0 1rem;
+	margin-bottom: 2rem;
 
-	& * {
-		transition: color 200ms;
+	box-shadow: 0 0 15px rgba(0, 0, 0, 0.75);
+	// Enter a value of 0 for any edges where the shadow should be hidden and a negative value (the same as the box-shadow blur radius - Xpx) to any edges where the shadow should be displayed.
+	// top right bottom left
+	clip-path: inset(0px 0px -15px 0px);
 
-		&:hover {
-			color: red;
+	nav {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+
+		& a {
+			transition: color 200ms;
+
+			&:hover {
+				color: steelblue;
+			}
 		}
-	}
 
-	& .logo {
-		font-size: 1.3rem;
-	}
+		& .brand {
+			font-size: 1.3rem;
+		}
 
-	& .name {
+		& .links {
+			a {
+				display: inline-block;
+				padding: 1rem;
+			}
+		}
 	}
 }

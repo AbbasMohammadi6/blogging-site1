@@ -10,7 +10,9 @@ import { getPosts } from "slices/getPostsSlice";
 import dbConnect from "utils/dbConnect";
 import User from "models/userModel";
 import Post, { IPost } from "models/postModel";
-import { getFiftyWords } from "utils/helpers";
+import { getFirstImgAndPar } from "utils/helpers";
+import styles from "styles/homepage.module.scss";
+import Layout from "components/Layout";
 
 export default function Home({
 	posts,
@@ -19,15 +21,23 @@ export default function Home({
 	posts: IPost[];
 	error: string;
 }) {
+	function getDate(date: any) {
+		return new Date(date).toLocaleDateString("fa", {
+			month: "long",
+			day: "numeric",
+			year: "numeric",
+		});
+	}
+
 	return (
 		<>
 			<Header />
 			{error ? (
 				<h1>{error}</h1>
 			) : (
-				<section>
+				<Layout>
 					{posts.map((article, idx) => (
-						<div key={idx}>
+						<div className={styles.card} key={idx}>
 							<Link href={`/posts/${article._id}`}>
 								<a>
 									<h1>{article.title}</h1>
@@ -35,19 +45,21 @@ export default function Home({
 							</Link>
 
 							<small>
-								Written By: {/* @ts-ignore */}
+								نویسنده: {/* @ts-ignore */}
 								<Link href={`/users/${article.owner._id}`}>
 									<a>{article.owner.name}</a>
 								</Link>{" "}
 								{/*Todo: Fix this later*/}
 								{/*@ts-ignore*/}
-								at {article.createdAt.substring(0, 10)}
+								در {getDate(article.createdAt)}
 							</small>
 
-							<div>{htmr(getFiftyWords(article.body))}</div>
+							<div className={styles.main}>
+								{htmr(getFirstImgAndPar(article.body))}
+							</div>
 						</div>
 					))}
-				</section>
+				</Layout>
 			)}
 		</>
 	);
