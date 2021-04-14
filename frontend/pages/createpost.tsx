@@ -22,6 +22,20 @@ const addPost = () => {
 		dispatch(createPost({ title, body: editorContent }));
 	};
 
+	const handleImageUpload = (
+		targetImgElement,
+		index,
+		state,
+		imageInfo,
+		remainingFilesCount
+	): void => {
+		console.log(targetImgElement, index, state, imageInfo, remainingFilesCount);
+	};
+
+	// 	handleImageUpload(targetImgElement, index, state, imageInfo, remainingFilesCount){
+	// 	console.log(targetImgElement, index, state, imageInfo, remainingFilesCount)
+	// }
+
 	if (typeof window !== "undefined" && !user.name) Router.push("/");
 
 	return (
@@ -47,6 +61,7 @@ const addPost = () => {
 					buttonList: buttonList.complex,
 				}}
 				onChange={(content) => setEditorContent(content)}
+				onImageUpload={handleImageUpload}
 			/>
 
 			<button onClick={handlePost}>POST</button>

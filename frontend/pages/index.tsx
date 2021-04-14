@@ -8,6 +8,7 @@ import Header from "components/Header";
 import { createPost } from "slices/createPostSlice";
 import { getPosts } from "slices/getPostsSlice";
 import dbConnect from "utils/dbConnect";
+import User from "models/userModel";
 import Post, { IPost } from "models/postModel";
 import { getFiftyWords } from "utils/helpers";
 
@@ -38,7 +39,9 @@ export default function Home({
 								<Link href={`/users/${article.owner._id}`}>
 									<a>{article.owner.name}</a>
 								</Link>{" "}
-								at {article.createdAt}
+								{/*Todo: Fix this later*/}
+								{/*@ts-ignore*/}
+								at {article.createdAt.substring(0, 10)}
 							</small>
 
 							<div>{htmr(getFiftyWords(article.body))}</div>
@@ -55,6 +58,11 @@ export const getStaticProps: GetStaticProps = async () => {
 	await dbConnect();
 
 	try {
+		// mongoose thrwos an error that says: Schema hasn't been registered for model "User".
+		// so I make this request to make mongoose know about User model
+		/** Todo: See if you could do this in another way **/
+		const users = await User.find({});
+
 		// by doing "name email", we are saying that we don't want the it to send the password
 		const posts: IPost[] = await Post.find({}).populate("owner", "name email");
 
@@ -76,9 +84,14 @@ export const getStaticProps: GetStaticProps = async () => {
 			};
 		});
 
+		// This seems to prevent the serializable error
+		// If so, delete the above mess
+		// I have to do substring in the component -> delete this line later
+		const newNewPosts = JSON.parse(JSON.stringify(posts));
+
 		return {
 			props: {
-				posts: newPosts,
+				posts: newNewPosts,
 				error: "",
 			},
 		};

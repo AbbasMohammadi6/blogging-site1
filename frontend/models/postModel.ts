@@ -1,4 +1,5 @@
 import { Schema, model, Document, Model, models } from "mongoose";
+import User from "models/userModel";
 
 // export interface IComment extends Document {
 // 	text: string;

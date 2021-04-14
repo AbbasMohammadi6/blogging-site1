@@ -66,8 +66,8 @@ export default function PostScreen({ id, body, title, comments }: Props) {
 			)}
 
 			<ul>
-				{comments.map((comment) => (
-					<li>
+				{comments.map((comment, idx) => (
+					<li key={idx}>
 						<p>
 							<Link href={`/users/${comment.owner._id}`}>
 								<a>{comment.owner.name}</a>
@@ -116,6 +116,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 		console.log(error);
 	}
 
+	/** Todo: If I send the posts object itself, it will thow an error, see if you can fix this **/
 	return {
 		props: {
 			id: params.id,
@@ -123,7 +124,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 			title: post.title,
 			createdAt: post.createdAt.toString().substring(4, 15),
 			comments: post.comments.map((comment) => {
-				// console.log(comment);
 				return {
 					text: comment.text,
 					_id: comment._id.toString(),
