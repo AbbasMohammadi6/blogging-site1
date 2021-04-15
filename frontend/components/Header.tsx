@@ -46,7 +46,7 @@ const Header = () => {
 						) : (
 							<>
 								<Link href="/register">
-									<a>ثبت نام </a>
+									<a>عضویت </a>
 								</Link>
 
 								<Link href="/login">

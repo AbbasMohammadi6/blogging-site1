@@ -6,4 +6,70 @@
 	& * {
 		width: 50%;
 	}
+
+	& h1 {
+		font-size: 1.5rem;
+		margin-bottom: 1rem;
+	}
+
+	& input,
+	& button {
+		margin: 0.5rem;
+		padding: 0.3rem;
+	}
+
+	& button {
+		border: none;
+		outline: none;
+		background: steelblue;
+		color: white;
+		transition: background 200ms;
+
+		&:hover {
+			background: darken(steelblue, 10%);
+			cursor: pointer;
+		}
+	}
+
+	& input {
+		transition: box-shadow 200ms;
+		outline: none;
+		border: 1px solid dodgerblue;
+	}
+
+	& input:focus {
+		box-shadow: 0 0 2px 1px dodgerblue;
+	}
+
+	& small {
+		text-align: end;
+		font-size: 0.7rem;
+		margin-top: 0.7rem;
+
+		& a:hover {
+			color: dodgerblue;
+		}
+	}
+
+	@media (max-width: 600px) {
+		& * {
+			width: 70%;
+		}
+	}
+
+	@media (max-width: 600px) {
+		& * {
+			width: 80%;
+		}
+	}
+}
+
+.darkTheme {
+	input {
+		border: 1px solid white;
+	}
+
+	& input:focus {
+		box-shadow: 0 0 3px 1px white;
+	}
 }
