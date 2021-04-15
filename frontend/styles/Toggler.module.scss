@@ -5,6 +5,7 @@
   border-radius: 1rem;
   position: relative;
   display: flex;
+  transition: background 300ms;
 
   & input {
     opacity: 0;

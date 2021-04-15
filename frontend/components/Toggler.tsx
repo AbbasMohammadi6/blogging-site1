@@ -20,7 +20,7 @@ const Toggler = () => {
 			<div className={styles.outerdivMoon}>
 				<i className="fas fa-moon" id="moon"></i>
 			</div>
-			<input type="checkbox" onChange={handleChange} />
+			<input type="checkbox" onChange={handleChange} checked={isDark} />
 			<div className={styles.toggleKnob}></div>
 		</div>
 	);

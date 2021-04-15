@@ -4,7 +4,7 @@ import Router from "next/router";
 import Link from "next/link";
 import { registerUser } from "slices/registerSlice";
 import { useAppDispatch, useAppSelector } from "utils/hooks";
-import styles from "styles/Register.module.scss";
+import styles from "styles/Form.module.scss";
 import Header from "components/Header";
 
 interface Props {}
