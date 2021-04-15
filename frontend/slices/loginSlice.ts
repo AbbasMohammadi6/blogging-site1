@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
+import { successUserRegister } from "slices/registerSlice";
 
 interface Data {
 	user: {
@@ -47,12 +48,16 @@ const loginSlice = createSlice({
 			state.loading = false;
 			state.error = action.payload;
 		},
+
+		reset: (state: loginState) => {
+			state.error = "";
+		},
 	},
 });
 
-const { request, success, fail } = loginSlice.actions;
+const { request, success, fail, reset } = loginSlice.actions;
 
-export const loginUser = (user) => async (dispatch): Promise<void> => {
+const loginUser = (user) => async (dispatch): Promise<void> => {
 	dispatch(request());
 
 	const config = {
@@ -65,6 +70,7 @@ export const loginUser = (user) => async (dispatch): Promise<void> => {
 		const { data } = await axios.post("/api/users/login", user, config);
 
 		dispatch(success(data));
+		dispatch(successUserRegister(data));
 
 		localStorage.setItem(
 			"userRegister",
@@ -75,4 +81,5 @@ export const loginUser = (user) => async (dispatch): Promise<void> => {
 	}
 };
 
+export { loginUser, reset };
 export default loginSlice.reducer;

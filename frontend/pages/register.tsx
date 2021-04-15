@@ -6,6 +6,7 @@ import { registerUser } from "slices/registerSlice";
 import { useAppDispatch, useAppSelector } from "utils/hooks";
 import styles from "styles/Form.module.scss";
 import Header from "components/Header";
+import Loader from "components/Loader";
 
 interface Props {}
 
@@ -44,51 +45,56 @@ const Register: FC<Props> = (props: Props) => {
 	return (
 		<>
 			<Header />
-			{loading ? <h1>Loading....</h1> : error ? <h2>Error: {error}</h2> : ""}
 
-			<form
-				onSubmit={handleSubmit}
-				className={`${styles.form} ${isDark && styles.darkTheme}`}
-			>
-				<h1>عضویت در سایت</h1>
+			{error && <h2>Error: {error}</h2>}
 
-				<input
-					type="text"
-					placeholder="نام"
-					value={name}
-					onChange={(e) => setName(e.target.value)}
-				/>
+			{loading ? (
+				<Loader />
+			) : (
+				<form
+					onSubmit={handleSubmit}
+					className={`${styles.form} ${isDark && styles.darkTheme}`}
+				>
+					<h1>عضویت در سایت</h1>
 
-				<input
-					type="email"
-					placeholder="ایمیل"
-					value={email}
-					onChange={(e) => setEmail(e.target.value)}
-				/>
+					<input
+						type="text"
+						placeholder="نام"
+						value={name}
+						onChange={(e) => setName(e.target.value)}
+					/>
 
-				<input
-					type="password"
-					placeholder="رمز"
-					value={password}
-					onChange={(e) => setPassword(e.target.value)}
-				/>
+					<input
+						type="email"
+						placeholder="ایمیل"
+						value={email}
+						onChange={(e) => setEmail(e.target.value)}
+					/>
 
-				<input
-					type="password"
-					placeholder="تأیید رمز"
-					value={confirmPassword}
-					onChange={(e) => setConfirmPassword(e.target.value)}
-				/>
+					<input
+						type="password"
+						placeholder="رمز"
+						value={password}
+						onChange={(e) => setPassword(e.target.value)}
+					/>
 
-				<button type="submit">ثبت نام</button>
+					<input
+						type="password"
+						placeholder="تأیید رمز"
+						value={confirmPassword}
+						onChange={(e) => setConfirmPassword(e.target.value)}
+					/>
 
-				<small>
-					قبلاً عضو شده اید؟{" "}
-					<Link href="/login">
-						<a>ورود</a>
-					</Link>
-				</small>
-			</form>
+					<button type="submit">ثبت نام</button>
+
+					<small>
+						قبلاً عضو شده اید؟{" "}
+						<Link href="/login">
+							<a>ورود</a>
+						</Link>
+					</small>
+				</form>
+			)}
 		</>
 	);
 };

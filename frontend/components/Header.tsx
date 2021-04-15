@@ -9,16 +9,7 @@ const Header = () => {
 	const userRegister = useAppSelector((state) => state.userRegister);
 	const { userInfo: registerUserInfo } = userRegister;
 
-	const userLogin = useAppSelector((state) => state.userLogin);
-	const { userInfo: loginUserInfo } = userLogin;
-
 	const { isDark } = useAppSelector((state) => state.theme);
-
-	// Why use useEffect to get that variable ? If you need to access such properties, access it within useEffect, so as to make sure that document is already established by then. https://stackoverflow.com/questions/46443652/react-16-warning-expected-server-html-to-contain-a-matching-div-in-body
-	let name: string = "";
-	useEffect(() => {
-		name = loginUserInfo.user.name || registerUserInfo.user.name;
-	});
 
 	return (
 		<header className={`${styles.header} ${isDark && styles.darkTheme}`}>
@@ -30,13 +21,10 @@ const Header = () => {
 
 					<Toggler />
 
-					{/*<i className="fas fa-sun-o"></i>
-					<i className="fas fa-moon-o"></i>*/}
-
 					<div className={styles.links}>
-						{name ? (
+						{userRegister.userInfo?.user?.name ? (
 							<div>
-								{name}
+								{userRegister.userInfo.user.name}
 								{"   "}
 
 								<Link href="/createpost">

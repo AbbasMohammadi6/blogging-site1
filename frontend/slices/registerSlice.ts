@@ -51,7 +51,7 @@ const registerSlice = createSlice({
 	},
 });
 
-const {
+export const {
 	requestUserRegister,
 	successUserRegister,
 	failUserRegister,

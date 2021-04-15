@@ -15,22 +15,28 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       if (!email || !password)
         return res
           .status(400)
-          .json({ message: "Email and password are required" });
+          .json({ message: "وارد کردن ایمیل و رمز الزامی است." });
 
       try {
         const user: IUser = await User.findOne({ email });
 
-        if (!user) return res.status(404).json({ message: "User not found" });
+        if (!user)
+          return res.status(404).json({ message: "ایمیل یا رمز اشتباه است." });
 
         if (!(await user.checkPassword(password)))
-          return res.status(401).json({ message: "Unable to login" });
+          return res.status(401).json({ message: "ایمیل یا رمز اشتباه است." });
 
         return res.json({
           user,
           token: user.generateToken(),
         });
       } catch (e) {
-        res.status(500).json({ message: "Server problem, try again later" });
+        res
+          .status(500)
+          .json({
+            message:
+              "متأسفانه مشکلی در سمت سرور ایجاد شدهی است. لطفاً دوباره اطلاعات را ارسال کنید.",
+          });
       }
 
       break;

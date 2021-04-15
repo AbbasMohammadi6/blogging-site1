@@ -1,16 +1,19 @@
 import React, { FC, useState, useEffect } from "react";
 import Router from "next/router";
 import Link from "next/link";
-import { loginUser } from "slices/loginSlice";
+import { loginUser, reset as resetLoginError } from "slices/loginSlice";
 import { useAppDispatch, useAppSelector } from "utils/hooks";
 import styles from "styles/Form.module.scss";
 import Header from "components/Header";
+import Loader from "components/Loader";
+import Modal from "components/Modal";
 
 interface Props {}
 
 const Login: FC<Props> = (props: Props) => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const dispatch = useAppDispatch();
 
@@ -25,9 +28,18 @@ const Login: FC<Props> = (props: Props) => {
     dispatch(loginUser({ email, password }));
   };
 
+  if (error && !isOpen) {
+    setIsOpen(true);
+  }
+
+  const closeModal = () => {
+    // reset error to not trigger the if statement above
+    dispatch(resetLoginError());
+    setIsOpen(false);
+  };
+
   useEffect(() => {
     if (userInfo.user.name) {
-      console.log("USER IS AUTHENTICATED");
       Router.push("/");
     }
   }, [userInfo]);
@@ -36,36 +48,40 @@ const Login: FC<Props> = (props: Props) => {
     <>
       <Header />
 
-      {loading ? <h1>Loading....</h1> : error ? <h2>Error: {error}</h2> : ""}
+      <Modal toggleModal={closeModal} isOpen={isOpen} message={error} />
 
-      <form
-        onSubmit={handleSubmit}
-        className={`${styles.form} ${isDark && styles.darkTheme}`}
-      >
-        <h1>ورود به حساب کاربری</h1>
-        <input
-          type="email"
-          placeholder="ایمیل"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+      {loading ? (
+        <Loader />
+      ) : (
+        <form
+          onSubmit={handleSubmit}
+          className={`${styles.form} ${isDark && styles.darkTheme}`}
+        >
+          <h1>ورود به حساب کاربری</h1>
+          <input
+            type="email"
+            placeholder="ایمیل"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
 
-        <input
-          type="password"
-          placeholder="رمز"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+          <input
+            type="password"
+            placeholder="رمز"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
 
-        <button type="submit">ورود</button>
+          <button type="submit">ورود</button>
 
-        <small>
-          حساب کاربری ندارید؟{" "}
-          <Link href="/register">
-            <a>عضویت</a>
-          </Link>
-        </small>
-      </form>
+          <small>
+            حساب کاربری ندارید؟{" "}
+            <Link href="/register">
+              <a>عضویت</a>
+            </Link>
+          </small>
+        </form>
+      )}
     </>
   );
 };
