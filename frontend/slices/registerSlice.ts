@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 
-interface UserRegisterState {
+interface State {
 	loading: boolean;
 	userInfo: Data;
 	error: any; // CHANGE THIS LATER
@@ -16,53 +16,47 @@ interface Data {
 	token: string;
 }
 
-const initialState: UserRegisterState = {
+const initialState: State = {
 	loading: false,
 	userInfo: { user: { name: "", email: "" }, token: "" },
 	error: "",
 };
 
-const registerSlice = createSlice({
+const slice = createSlice({
 	name: "register",
 
 	initialState,
 
 	reducers: {
-		requestUserRegister: (state: UserRegisterState) => {
+		request: (state: State) => {
 			state.loading = true;
 		},
 
-		successUserRegister: (
-			state: UserRegisterState,
-			action: PayloadAction<Data>
-		) => {
+		success: (state: State, action: PayloadAction<Data>) => {
 			state.loading = false;
 			state.userInfo = action.payload;
 			state.error = null;
 		},
 
-		failUserRegister: (
-			state: UserRegisterState,
-			action: PayloadAction<string>
-		) => {
+		fail: (state: State, action: PayloadAction<string>) => {
 			state.loading = false;
 			state.error = action.payload;
+		},
+
+		reset: (state: State) => {
+			state.error = "";
 		},
 	},
 });
 
-export const {
-	requestUserRegister,
-	successUserRegister,
-	failUserRegister,
-} = registerSlice.actions;
+const { request, success, fail, reset } = slice.actions;
 
-export const registerUser = (user: {
+const registerUser = (user: {
 	name: string;
 	email: string;
 	password: string;
 }) => async (dispatch) => {
-	dispatch(requestUserRegister());
+	dispatch(request());
 
 	const config = {
 		headers: {
@@ -73,15 +67,16 @@ export const registerUser = (user: {
 	try {
 		const { data } = await axios.post("/api/users/register", user, config);
 
-		dispatch(successUserRegister(data));
+		dispatch(success(data));
 
 		localStorage.setItem(
 			"userRegister",
 			JSON.stringify({ userInfo: { user: data.user, token: data.token } })
 		);
 	} catch (e) {
-		dispatch(failUserRegister(e.response.data.message));
+		dispatch(fail(e.response.data.message));
 	}
 };
 
-export default registerSlice.reducer;
+export { success, reset, registerUser };
+export default slice.reducer;

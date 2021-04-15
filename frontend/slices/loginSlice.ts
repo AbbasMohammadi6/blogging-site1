@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
-import { successUserRegister } from "slices/registerSlice";
+import { success as successUserRegister } from "slices/registerSlice";
 
 interface Data {
 	user: {
@@ -30,7 +30,7 @@ const initialState: loginState = {
 	},
 };
 
-const loginSlice = createSlice({
+const slice = createSlice({
 	name: "login",
 	initialState,
 	reducers: {
@@ -55,7 +55,7 @@ const loginSlice = createSlice({
 	},
 });
 
-const { request, success, fail, reset } = loginSlice.actions;
+const { request, success, fail, reset } = slice.actions;
 
 const loginUser = (user) => async (dispatch): Promise<void> => {
 	dispatch(request());
@@ -82,4 +82,4 @@ const loginUser = (user) => async (dispatch): Promise<void> => {
 };
 
 export { loginUser, reset };
-export default loginSlice.reducer;
+export default slice.reducer;

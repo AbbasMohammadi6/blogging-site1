@@ -15,13 +15,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 			if (!name || !email || !password)
 				return res
 					.status(400)
-					.json({ message: "name, email and password are required" });
-
-			/** Todo: hash passwords later **/
+					.json({ message: "وارد کردن نام, ایمیل و رمز الزامی است." });
 
 			try {
 				if (await User.findOne({ email }))
-					return res.status(400).json({ message: "Email aleady exists" });
+					return res
+						.status(400)
+						.json({ message: "این ایمیل قبلاً استفاده شده است." });
 
 				const user = await User.create({ name, email, password });
 

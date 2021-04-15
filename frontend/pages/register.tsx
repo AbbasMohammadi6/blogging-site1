@@ -2,11 +2,15 @@ import React, { FC, useState, useEffect } from "react";
 import axios from "axios";
 import Router from "next/router";
 import Link from "next/link";
-import { registerUser } from "slices/registerSlice";
+import {
+	registerUser,
+	reset as resetRegisterError,
+} from "slices/registerSlice";
 import { useAppDispatch, useAppSelector } from "utils/hooks";
 import styles from "styles/Form.module.scss";
 import Header from "components/Header";
 import Loader from "components/Loader";
+import Modal from "components/Modal";
 
 interface Props {}
 
@@ -15,6 +19,11 @@ const Register: FC<Props> = (props: Props) => {
 	const [email, setEmail] = useState<string>("");
 	const [password, setPassword] = useState<string>("");
 	const [confirmPassword, setConfirmPassword] = useState<string>("");
+
+	const [modal, setModal] = useState<{ message: string; isOpen: boolean }>({
+		message: "",
+		isOpen: false,
+	});
 
 	const dispatch = useAppDispatch();
 
@@ -29,15 +38,26 @@ const Register: FC<Props> = (props: Props) => {
 		e.preventDefault();
 
 		if (password !== confirmPassword) {
-			return console.log("Passwords don't match");
+			return setModal({
+				message: "رمز و تأیید رمز یکسان نیستند.",
+				isOpen: true,
+			});
 		}
 
 		dispatch(registerUser({ name, email, password }));
 	};
 
+	if (error && !modal.isOpen) {
+		setModal({ message: error, isOpen: true });
+	}
+
+	const closeModal = (): void => {
+		dispatch(resetRegisterError());
+		setModal({ message: "", isOpen: false });
+	};
+
 	useEffect(() => {
 		if (userInfo.user.name) {
-			console.log("USER IS AUTHENTICATED");
 			Router.push("/");
 		}
 	}, [userInfo]);
@@ -46,7 +66,11 @@ const Register: FC<Props> = (props: Props) => {
 		<>
 			<Header />
 
-			{error && <h2>Error: {error}</h2>}
+			<Modal
+				isOpen={modal.isOpen}
+				closeModal={closeModal}
+				message={modal.message}
+			/>
 
 			{loading ? (
 				<Loader />
