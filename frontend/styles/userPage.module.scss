@@ -1,0 +1,38 @@
+// This file was compeletly copied from 'styles/homepage.module.scss', see if you could one scss file for both homepage and userPage later.
+
+.main {
+	font-weight: 300;
+}
+
+.darkTheme {
+	background: #333;
+	color: white;
+}
+
+.card {
+	padding: 1rem 2rem 2rem;
+	border-bottom: 1px solid #ccc;
+
+	& img {
+		display: block;
+		margin: auto;
+		width: 80%;
+	}
+
+	& h1 {
+		margin-bottom: 1.5rem;
+	}
+
+	& p {
+		margin: 1rem 0;
+		line-height: 2rem;
+	}
+
+	& a {
+		transition: color 100ms;
+
+		&:hover {
+			color: steelblue;
+		}
+	}
+}

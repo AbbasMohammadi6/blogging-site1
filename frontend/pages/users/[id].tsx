@@ -3,9 +3,12 @@ import { GetStaticProps, GetStaticPaths } from "next";
 import User, { IUser } from "models/userModel";
 import dbConnect from "utils/dbConnect";
 import htmr from "htmr";
-import { getFiftyWords } from "utils/helpers";
+import { getFirstImgAndPar } from "utils/helpers";
 import Link from "next/link";
 import Header from "components/Header";
+import Post, { IPost } from "models/postModel";
+import Layout from "components/Layout";
+import styles from "styles/userPage.module.scss";
 
 interface Props {
 	name: string;
@@ -19,23 +22,25 @@ const Page: FC<Props> = ({ name, posts, error }: Props) => {
 	return (
 		<>
 			<Header />
+			<Layout>
+				{error ? (
+					<h1>{error}</h1>
+				) : (
+					<div className={styles.main}>
+						{posts.map((post) => (
+							<div key={post._id} className={styles.card}>
+								<Link href={`/posts/${post._id}`}>
+									<a>
+										<h1>{post.title}</h1>
+									</a>
+								</Link>
 
-			{error ? (
-				<h1>{error}</h1>
-			) : (
-				<>
-					{posts.map((post) => (
-						<div key={post._id}>
-							<Link href={`/posts/${post._id}`}>
-								<a>
-									<h1>{post.title}</h1>
-								</a>
-							</Link>
-							<p>{htmr(getFiftyWords(post.body))}</p>
-						</div>
-					))}
-				</>
-			)}
+								<p>{htmr(getFirstImgAndPar(post.body))}</p>
+							</div>
+						))}
+					</div>
+				)}
+			</Layout>
 		</>
 	);
 };
@@ -66,20 +71,32 @@ export const getStaticProps: GetStaticProps = async ({ params: { id } }) => {
 
 	try {
 		const user = await User.findById(id)
-			.populate("posts", "title body createdAt")
+			// .populate("posts", "title body createdAt")
 			.select("-password");
+
+		const posts = await Post.find({ owner: id });
+
+		// interface Props {
+		// 	name: string;
+		// 	error?: any;
+		// 	posts: { title: string; body: string; _id: string }[];
+		// }
 
 		return {
 			props: {
 				name: user.name,
-				posts: user.posts.map((post) => {
-					return {
-						title: post.title,
-						body: post.body,
-						_id: post._id.toString(),
-					};
-				}),
+				posts: JSON.parse(JSON.stringify(posts)),
 			},
+			// props: {
+			// 	name: user.name,
+			// 	posts: user.posts.map((post) => {
+			// 		return {
+			// 			title: post.title,
+			// 			body: post.body,
+			// 			_id: post._id.toString(),
+			// 		};
+			// 	}),
+			// },
 		};
 	} catch (e) {
 		return {
