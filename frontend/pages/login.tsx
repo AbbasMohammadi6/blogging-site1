@@ -28,15 +28,17 @@ const Login: FC<Props> = (props: Props) => {
     dispatch(loginUser({ email, password }));
   };
 
-  if (error && !isOpen) {
-    setIsOpen(true);
-  }
-
   const closeModal = () => {
     // reset error to not trigger the if statement above
     dispatch(resetLoginError());
     setIsOpen(false);
   };
+
+  useEffect(() => {
+    if (error) {
+      setIsOpen(true);
+    }
+  }, [error]);
 
   useEffect(() => {
     if (userInfo.user.name) {
@@ -48,7 +50,7 @@ const Login: FC<Props> = (props: Props) => {
     <>
       <Header />
 
-      <Modal toggleModal={closeModal} isOpen={isOpen} message={error} />
+      <Modal closeModal={closeModal} isOpen={isOpen} message={error} />
 
       {loading ? (
         <Loader />

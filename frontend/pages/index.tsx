@@ -10,7 +10,7 @@ import { getPosts } from "slices/getPostsSlice";
 import dbConnect from "utils/dbConnect";
 import User from "models/userModel";
 import Post, { IPost } from "models/postModel";
-import { getFirstImgAndPar } from "utils/helpers";
+import { getFirstImgAndPar, convertDateToShamsi } from "utils/helpers";
 import styles from "styles/homepage.module.scss";
 import Layout from "components/Layout";
 
@@ -23,14 +23,6 @@ export default function Home({
 }) {
 	const { isDark } = useAppSelector((state) => state.theme);
 
-	function getDate(date: any) {
-		return new Date(date).toLocaleDateString("fa", {
-			month: "long",
-			day: "numeric",
-			year: "numeric",
-		});
-	}
-
 	return (
 		<>
 			<Header />
@@ -41,20 +33,18 @@ export default function Home({
 					<>
 						{posts.map((article, idx) => (
 							<div className={styles.card} key={idx}>
-								<Link href={`/posts/${article._id}`}>
-									<a>
-										<h1>{article.title}</h1>
-									</a>
-								</Link>
+								<h1>
+									<Link href={`/posts/${article._id}`}>
+										<a>{article.title}</a>
+									</Link>
+								</h1>
 
 								<small>
 									نویسنده: {/* @ts-ignore */}
 									<Link href={`/users/${article.owner._id}`}>
 										<a>{article.owner.name}</a>
 									</Link>{" "}
-									{/*Todo: Fix this later*/}
-									{/*@ts-ignore*/}
-									در {getDate(article.createdAt)}
+									در {convertDateToShamsi(article.createdAt)}
 								</small>
 
 								<div className={styles.main}>
@@ -82,27 +72,7 @@ export const getStaticProps: GetStaticProps = async () => {
 		// by doing "name email", we are saying that we don't want the it to send the password
 		const posts: IPost[] = await Post.find({}).populate("owner", "name email");
 
-		// If I send the posts array, nextjs will throw an error,
-		// saying that it's not serializable
-
-		const newPosts = posts.map((post) => {
-			return {
-				title: post.title,
-				body: post.body,
-				_id: post._id.toString(),
-				createdAt: post.createdAt.toString().substring(4, 15),
-				owner: {
-					name: post.owner.name,
-					// Do ts-ignore, because in the IPost interface _id is of type objectId, but here I poulated it with name and _id
-					// @ts-ignore
-					_id: post.owner._id.toString(),
-				},
-			};
-		});
-
 		// This seems to prevent the serializable error
-		// If so, delete the above mess
-		// I have to do substring in the component -> delete this line later
 		const newNewPosts = JSON.parse(JSON.stringify(posts));
 
 		return {

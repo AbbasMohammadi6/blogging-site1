@@ -21,7 +21,7 @@ const handler = async (
 			await dbConnect();
 
 			if (!text)
-				return res.status(400).json({ message: "comment's text is required" });
+				return res.status(400).json({ message: "متن کامنت خالی است." });
 
 			if (!mongoose.Types.ObjectId.isValid)
 				return res.status(400).json({ message: "id is not valid" });
@@ -41,9 +41,9 @@ const handler = async (
 
 				return res.status(201).json(commentedPost);
 			} catch (e) {
-				return res
-					.status(500)
-					.json({ message: "Server error, try again later" });
+				return res.status(500).json({
+					message: "مشکلی برای سرور رخ داده است، لطفاً دوباره امتحان کنید.",
+				});
 			}
 
 		default:

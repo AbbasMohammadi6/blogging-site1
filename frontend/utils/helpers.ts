@@ -25,3 +25,11 @@ export const getFirstImgAndPar = (html: string) => {
 
 	return `<p>${whatWeWantToShow}...</p> <div>${image}</div>`;
 };
+
+export const convertDateToShamsi = (date: any) => {
+	return new Date(date).toLocaleDateString("fa", {
+		month: "long",
+		day: "numeric",
+		year: "numeric",
+	});
+};

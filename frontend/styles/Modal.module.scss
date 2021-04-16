@@ -7,7 +7,8 @@
 }
 
 .backdrop {
-	position: absolute;
+	// Why fixed and not absolute? becuase if we had a long page and we use absolute, this modal will be showed at the beginning of the page not the end where we want it to be.
+	position: fixed;
 	top: 0;
 	left: 0;
 	right: 0;
@@ -19,7 +20,7 @@
 .modal {
 	color: black;
 	z-index: 1;
-	position: absolute;
+	position: fixed;
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);

@@ -7,7 +7,12 @@ import Post, { IPost } from "models/postModel";
 import dbConnect from "utils/dbConnect";
 import Header from "components/Header";
 import { useAppSelector, useAppDispatch } from "utils/hooks";
-import { addComment } from "slices/addCommentSlice";
+import { addComment, reset as resetCommentError } from "slices/addCommentSlice";
+import Layout from "components/Layout";
+import styles from "styles/Post.module.scss";
+import Modal from "components/Modal";
+import LoaderSpinner from "components/LoaderSpinner";
+import { convertDateToShamsi } from "utils/helpers";
 
 interface Props {
 	id: string;
@@ -24,6 +29,11 @@ interface Props {
 export default function PostScreen({ id, body, title, comments }: Props) {
 	const [comment, setComment] = useState("");
 
+	const [modal, setModal] = useState<{ isOpen: boolean; message: string }>({
+		isOpen: false,
+		message: "",
+	});
+
 	const router = useRouter();
 
 	const dispatch = useAppDispatch();
@@ -39,47 +49,80 @@ export default function PostScreen({ id, body, title, comments }: Props) {
 	const postComment = (event: FormEvent<HTMLFormElement>): void => {
 		event.preventDefault();
 
+		if (!comment)
+			return setModal({
+				isOpen: true,
+				message: "شما هنوز نظری وارد نکرده‌اید.",
+			});
+
 		dispatch(addComment({ text: comment, id }));
 	};
 
-	// This caused an infinite loop, fix it.
-	// useEffect(() => {
-	// 	router.reload();
-	// }, [success]);
+	const closeModal = () => {
+		dispatch(resetCommentError());
+		setModal({ isOpen: false, message: "" });
+	};
+
+	useEffect(() => {
+		if (error) {
+			setModal({ isOpen: true, message: error });
+		}
+	}, [error]);
+
+	useEffect(() => {
+		if (success) {
+			router.reload();
+			// reload to show the comment that was just added.
+		}
+	}, [success]);
 
 	return (
 		<>
 			<Header />
-			<h1>{title}</h1>
-			<div>{htmr(body)}</div>
-			{user.name && (
-				<form onSubmit={postComment}>
-					{loading ? <h3>loading...</h3> : error && <h3>{error}</h3>}
-					<textarea
-						rows={5}
-						cols={100}
-						value={comment}
-						onChange={(e) => setComment(e.target.value)}
-					></textarea>
-					<button type="submit">Post</button>
-				</form>
-			)}
 
-			<ul>
-				{comments.map((comment, idx) => (
-					<li key={idx}>
-						<p>
-							<Link href={`/users/${comment.owner._id}`}>
-								<a>{comment.owner.name}</a>
-							</Link>
-						</p>
+			<Modal
+				isOpen={modal.isOpen}
+				closeModal={closeModal}
+				message={modal.message}
+			/>
 
-						<small>{comment.createdAt}</small>
+			<Layout>
+				<section className={styles.main}>
+					<h1>{title}</h1>
+					<div>{htmr(body)}</div>
+				</section>
 
-						<p>{comment.text}</p>
-					</li>
-				))}
-			</ul>
+				{user.name && (
+					<form onSubmit={postComment} className={styles.form}>
+						<h3>ارسال نظرات</h3>
+
+						<textarea
+							value={comment}
+							onChange={(e) => setComment(e.target.value)}
+						></textarea>
+
+						<button type="submit" disabled={loading}>
+							ارسال {loading ? <LoaderSpinner /> : ""}
+						</button>
+					</form>
+				)}
+
+				<ul className={styles.comments}>
+					{comments.map((comment, idx) => (
+						<li key={idx}>
+							<h4>
+								<Link href={`/users/${comment.owner._id}`}>
+									<a>{comment.owner.name}</a>
+								</Link>
+							</h4>
+
+							<small>{convertDateToShamsi(comment.createdAt)}</small>
+
+							<p>{comment.text}</p>
+						</li>
+					))}
+				</ul>
+			</Layout>
 		</>
 	);
 }
@@ -116,24 +159,25 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 		console.log(error);
 	}
 
-	/** Todo: If I send the posts object itself, it will thow an error, see if you can fix this **/
 	return {
-		props: {
-			id: params.id,
-			body: post.body,
-			title: post.title,
-			createdAt: post.createdAt.toString().substring(4, 15),
-			comments: post.comments.map((comment) => {
-				return {
-					text: comment.text,
-					_id: comment._id.toString(),
-					createdAt: comment.createdAt.toString().substring(4, 15),
-					owner: {
-						name: comment.owner.name,
-						_id: comment.owner._id.toString(),
-					},
-				};
-			}),
-		},
+		props: JSON.parse(JSON.stringify(post)),
 	};
 };
+
+// props: {
+// 	id: params.id,
+// 	body: post.body,
+// 	title: post.title,
+// 	createdAt: post.createdAt.toString().substring(4, 15),
+// 	comments: post.comments.map((comment) => {
+// 		return {
+// 			text: comment.text,
+// 			_id: comment._id.toString(),
+// 			createdAt: comment.createdAt.toString().substring(4, 15),
+// 			owner: {
+// 				name: comment.owner.name,
+// 				_id: comment.owner._id.toString(),
+// 			},
+// 		};
+// 	}),
+// },

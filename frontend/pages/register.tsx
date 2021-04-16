@@ -47,14 +47,16 @@ const Register: FC<Props> = (props: Props) => {
 		dispatch(registerUser({ name, email, password }));
 	};
 
-	if (error && !modal.isOpen) {
-		setModal({ message: error, isOpen: true });
-	}
-
 	const closeModal = (): void => {
 		dispatch(resetRegisterError());
 		setModal({ message: "", isOpen: false });
 	};
+
+	useEffect(() => {
+		if (error) {
+			setModal({ message: error, isOpen: true });
+		}
+	}, [error]);
 
 	useEffect(() => {
 		if (userInfo.user.name) {
@@ -86,6 +88,7 @@ const Register: FC<Props> = (props: Props) => {
 						placeholder="نام"
 						value={name}
 						onChange={(e) => setName(e.target.value)}
+						required={true}
 					/>
 
 					<input
@@ -93,6 +96,7 @@ const Register: FC<Props> = (props: Props) => {
 						placeholder="ایمیل"
 						value={email}
 						onChange={(e) => setEmail(e.target.value)}
+						required={true}
 					/>
 
 					<input
@@ -100,6 +104,7 @@ const Register: FC<Props> = (props: Props) => {
 						placeholder="رمز"
 						value={password}
 						onChange={(e) => setPassword(e.target.value)}
+						required={true}
 					/>
 
 					<input
@@ -107,6 +112,7 @@ const Register: FC<Props> = (props: Props) => {
 						placeholder="تأیید رمز"
 						value={confirmPassword}
 						onChange={(e) => setConfirmPassword(e.target.value)}
+						required={true}
 					/>
 
 					<button type="submit">ثبت نام</button>

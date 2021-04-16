@@ -31,18 +31,19 @@ const slice = createSlice({
 			state.error = action.payload;
 			state.loading = false;
 		},
+
+		reset: (state: State) => {
+			state.error = "";
+		},
 	},
 });
 
-const { request, success, fail } = slice.actions;
+const { request, success, fail, reset } = slice.actions;
 
-export const addComment = ({
-	text,
-	id,
-}: {
-	text: string;
-	id: string;
-}) => async (dispatch, getState): Promise<void> => {
+const addComment = ({ text, id }: { text: string; id: string }) => async (
+	dispatch,
+	getState
+): Promise<void> => {
 	dispatch(request());
 
 	const {
@@ -65,4 +66,5 @@ export const addComment = ({
 	}
 };
 
+export { addComment, reset };
 export default slice.reducer;
