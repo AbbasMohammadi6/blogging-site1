@@ -70,33 +70,16 @@ export const getStaticProps: GetStaticProps = async ({ params: { id } }) => {
 	await dbConnect();
 
 	try {
-		const user = await User.findById(id)
-			// .populate("posts", "title body createdAt")
-			.select("-password");
+		const user = await User.findById(id).select("-password");
 
 		const posts = await Post.find({ owner: id });
-
-		// interface Props {
-		// 	name: string;
-		// 	error?: any;
-		// 	posts: { title: string; body: string; _id: string }[];
-		// }
 
 		return {
 			props: {
 				name: user.name,
+				// done this to prevent the unserializable error
 				posts: JSON.parse(JSON.stringify(posts)),
 			},
-			// props: {
-			// 	name: user.name,
-			// 	posts: user.posts.map((post) => {
-			// 		return {
-			// 			title: post.title,
-			// 			body: post.body,
-			// 			_id: post._id.toString(),
-			// 		};
-			// 	}),
-			// },
 		};
 	} catch (e) {
 		return {

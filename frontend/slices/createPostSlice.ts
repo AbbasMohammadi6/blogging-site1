@@ -1,30 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 
-interface Data {
-	title: string;
-	body: string;
-	_id: string;
-	createdAt: string;
-	updatedAt: string;
-}
-
 interface State {
 	loading: boolean;
-	error: string;
-	data: Data;
+	error?: string;
+	success?: boolean;
 }
 
 const initialState: State = {
 	loading: false,
-	error: "",
-	data: {
-		title: "",
-		body: "",
-		_id: "",
-		createdAt: "",
-		updatedAt: "",
-	},
 };
 
 const slice = createSlice({
@@ -35,9 +19,9 @@ const slice = createSlice({
 			state.loading = true;
 		},
 
-		success: (state: State, action: PayloadAction<Data>): void => {
+		success: (state: State): void => {
 			state.loading = false;
-			state.data = action.payload;
+			state.success = true;
 			state.error = "";
 		},
 
@@ -45,12 +29,17 @@ const slice = createSlice({
 			state.loading = false;
 			state.error = action.payload;
 		},
+
+		reset: (state: State) => {
+			state.error = "";
+			state.success = false;
+		},
 	},
 });
 
-const { request, success, fail } = slice.actions;
+const { request, success, fail, reset } = slice.actions;
 
-export const createPost = (post: { title: string; body: string }) => async (
+const createPost = (post: { title: string; body: string }) => async (
 	dispatch,
 	getState
 ): Promise<void> => {
@@ -68,12 +57,13 @@ export const createPost = (post: { title: string; body: string }) => async (
 	};
 
 	try {
-		const { data } = await axios.post("/api/posts/create", post, config);
+		await axios.post("/api/posts/create", post, config);
 
-		dispatch(success(data));
+		dispatch(success());
 	} catch (error) {
 		dispatch(fail(error.response.data.message));
 	}
 };
 
+export { createPost, reset };
 export default slice.reducer;

@@ -19,16 +19,18 @@ const handler = async (
 	switch (method) {
 		case "POST":
 			if (!title || !body)
-				return res.status(400).json({ message: "title and body are required" });
+				return res
+					.status(400)
+					.json({ message: "وارد کردن عنوانو و متن پست الزامی است." });
 
 			try {
 				const post: IPost = await Post.create({ title, body, owner: user._id });
 
-				return res.status(201).json(post);
+				return res.status(201).send("");
 			} catch (e) {
-				return res
-					.status(500)
-					.json({ message: "Server error, try again later" });
+				return res.status(500).json({
+					message: "مشکلی در سمت سرور رخ داده است، اطفاً دوباره امتحان کنید.",
+				});
 			}
 
 			break;

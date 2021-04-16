@@ -21,3 +21,7 @@ button,
 select {
 	font-family: inherit;
 }
+
+.se-toolbar {
+	direction: ltr;
+}

@@ -1,0 +1,30 @@
+.main {
+	min-height: 80%;
+
+	& input {
+		border: #dadada solid 1px;
+		padding: 0.5rem;
+		width: 100%;
+		margin-bottom: -1px;
+		outline: none;
+	}
+
+	& .button {
+		display: block;
+		margin-right: auto;
+		border: none;
+		background: steelblue;
+		color: white;
+		padding: 0.5rem 1rem;
+		margin: 1rem 0;
+		margin-right: auto;
+
+		&:hover {
+			background: darken(steelblue, 10%);
+		}
+
+		& code {
+			direction: ltr;
+		}
+	}
+}
