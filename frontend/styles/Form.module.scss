@@ -4,7 +4,7 @@
 	align-items: center;
 
 	& * {
-		width: 50%;
+		width: 60%;
 	}
 
 	& h1 {
@@ -53,13 +53,13 @@
 
 	@media (max-width: 600px) {
 		& * {
-			width: 70%;
+			width: 80%;
 		}
 	}
 
 	@media (max-width: 600px) {
 		& * {
-			width: 80%;
+			width: 90%;
 		}
 	}
 }

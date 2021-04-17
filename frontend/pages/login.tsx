@@ -7,6 +7,7 @@ import styles from "styles/Form.module.scss";
 import Header from "components/Header";
 import Loader from "components/Loader";
 import Modal from "components/Modal";
+import Layout from "components/Layout";
 
 interface Props {}
 
@@ -50,40 +51,44 @@ const Login: FC<Props> = (props: Props) => {
     <>
       <Header />
 
-      <Modal closeModal={closeModal} isOpen={isOpen} message={error} />
+      <Layout>
+        <Modal closeModal={closeModal} isOpen={isOpen} message={error} />
 
-      {loading ? (
-        <Loader />
-      ) : (
-        <form
-          onSubmit={handleSubmit}
-          className={`${styles.form} ${isDark && styles.darkTheme}`}
-        >
-          <h1>ورود به حساب کاربری</h1>
-          <input
-            type="email"
-            placeholder="ایمیل"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+        {loading ? (
+          <Loader />
+        ) : (
+          <form
+            onSubmit={handleSubmit}
+            className={`${styles.form} ${isDark && styles.darkTheme}`}
+          >
+            <h1>ورود به حساب کاربری</h1>
+            <input
+              type="email"
+              placeholder="ایمیل"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required={true}
+            />
 
-          <input
-            type="password"
-            placeholder="رمز"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+            <input
+              type="password"
+              placeholder="رمز"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required={true}
+            />
 
-          <button type="submit">ورود</button>
+            <button type="submit">ورود</button>
 
-          <small>
-            حساب کاربری ندارید؟{" "}
-            <Link href="/register">
-              <a>عضویت</a>
-            </Link>
-          </small>
-        </form>
-      )}
+            <small>
+              حساب کاربری ندارید؟{" "}
+              <Link href="/register">
+                <a>عضویت</a>
+              </Link>
+            </small>
+          </form>
+        )}
+      </Layout>
     </>
   );
 };

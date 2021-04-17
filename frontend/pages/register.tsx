@@ -11,6 +11,7 @@ import styles from "styles/Form.module.scss";
 import Header from "components/Header";
 import Loader from "components/Loader";
 import Modal from "components/Modal";
+import Layout from "components/Layout";
 
 interface Props {}
 
@@ -68,63 +69,65 @@ const Register: FC<Props> = (props: Props) => {
 		<>
 			<Header />
 
-			<Modal
-				isOpen={modal.isOpen}
-				closeModal={closeModal}
-				message={modal.message}
-			/>
+			<Layout>
+				<Modal
+					isOpen={modal.isOpen}
+					closeModal={closeModal}
+					message={modal.message}
+				/>
 
-			{loading ? (
-				<Loader />
-			) : (
-				<form
-					onSubmit={handleSubmit}
-					className={`${styles.form} ${isDark && styles.darkTheme}`}
-				>
-					<h1>عضویت در سایت</h1>
+				{loading ? (
+					<Loader />
+				) : (
+					<form
+						onSubmit={handleSubmit}
+						className={`${styles.form} ${isDark && styles.darkTheme}`}
+					>
+						<h1>عضویت در سایت</h1>
 
-					<input
-						type="text"
-						placeholder="نام"
-						value={name}
-						onChange={(e) => setName(e.target.value)}
-						required={true}
-					/>
+						<input
+							type="text"
+							placeholder="نام"
+							value={name}
+							onChange={(e) => setName(e.target.value)}
+							required={true}
+						/>
 
-					<input
-						type="email"
-						placeholder="ایمیل"
-						value={email}
-						onChange={(e) => setEmail(e.target.value)}
-						required={true}
-					/>
+						<input
+							type="email"
+							placeholder="ایمیل"
+							value={email}
+							onChange={(e) => setEmail(e.target.value)}
+							required={true}
+						/>
 
-					<input
-						type="password"
-						placeholder="رمز"
-						value={password}
-						onChange={(e) => setPassword(e.target.value)}
-						required={true}
-					/>
+						<input
+							type="password"
+							placeholder="رمز"
+							value={password}
+							onChange={(e) => setPassword(e.target.value)}
+							required={true}
+						/>
 
-					<input
-						type="password"
-						placeholder="تأیید رمز"
-						value={confirmPassword}
-						onChange={(e) => setConfirmPassword(e.target.value)}
-						required={true}
-					/>
+						<input
+							type="password"
+							placeholder="تأیید رمز"
+							value={confirmPassword}
+							onChange={(e) => setConfirmPassword(e.target.value)}
+							required={true}
+						/>
 
-					<button type="submit">ثبت نام</button>
+						<button type="submit">ثبت نام</button>
 
-					<small>
-						قبلاً عضو شده اید؟{" "}
-						<Link href="/login">
-							<a>ورود</a>
-						</Link>
-					</small>
-				</form>
-			)}
+						<small>
+							قبلاً عضو شده اید؟{" "}
+							<Link href="/login">
+								<a>ورود</a>
+							</Link>
+						</small>
+					</form>
+				)}
+			</Layout>
 		</>
 	);
 };
