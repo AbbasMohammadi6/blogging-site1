@@ -1,18 +1,22 @@
 .header {
+	position: fixed;
+	top: 0;
+	left: 0;
 	height: 10vh;
-
+	width: 100%;
 	padding: 0 1rem;
-	margin-bottom: 2rem;
-
+	background: white;
 	box-shadow: 0 0 15px rgba(0, 0, 0, 0.75);
-	// Enter a value of 0 for any edges where the shadow should be hidden and a negative value (the same as the box-shadow blur radius - Xpx) to any edges where the shadow should be displayed.
-	// top right bottom left
-	clip-path: inset(0px 0px -15px 0px);
 
 	nav {
+		height: 100%;
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
+		position: relative;
+		width: 80%;
+		max-width: 1000px;
+		margin: auto;
 
 		& a {
 			transition: color 200ms;
@@ -26,15 +30,147 @@
 			font-size: 1.3rem;
 		}
 
-		& .links {
+		& .linksContainer {
+			display: flex;
+			align-items: center;
+
+			@media (max-width: 600px) {
+				display: none;
+				position: fixed;
+				top: 0;
+				left: 0;
+				height: 100%;
+				width: 15rem;
+				background: #333;
+			}
+
 			a {
 				display: inline-block;
 				padding: 1rem;
 			}
 		}
+
+		& .menuBtn {
+			display: none;
+			position: absolute;
+			// ((header's height) / 2) - ((.menuBtn's height) / 2), make it exactly in the middle (vertically)
+			top: calc((5vh) - 18.5px);
+			left: 2rem;
+			width: 39px;
+			height: 37px;
+			border: 1px #333 solid;
+			border-radius: 3px;
+
+			&:hover {
+				cursor: pointer;
+			}
+
+			@media (max-width: 600px) {
+				display: block;
+			}
+
+			& div {
+				background: #333;
+				height: 3px;
+				width: 25px;
+				position: absolute;
+				top: 15px;
+				left: 6px;
+				transition: all 300ms;
+
+				&::before,
+				&::after {
+					content: "";
+					position: absolute;
+					background: #333;
+					height: 3px;
+					width: 25px;
+				}
+
+				&::before {
+					top: -9px;
+					left: 0;
+				}
+
+				&::after {
+					top: 10px;
+					left: 0;
+				}
+			}
+		}
 	}
 }
 
-.darkTheme {
+.showMenu.header {
+	& nav {
+		& .linksContainer {
+			color: white;
+			padding-top: 5rem;
+			display: flex;
+			flex-direction: column;
+			text-align: center;
+			animation: drawer 300ms;
+
+			& .links {
+				margin-top: 1rem;
+
+				& a {
+					padding: 1rem;
+					display: block;
+				}
+			}
+		}
+
+		& .menuBtn {
+			border-color: white;
+
+			& div {
+				transform: rotate(135deg);
+				background: white;
+
+				&::after,
+				&::before {
+					background: white;
+					top: 0;
+					left: 0;
+					transform: rotate(90deg);
+				}
+			}
+		}
+	}
+}
+
+@keyframes drawer {
+	from {
+		width: 0;
+	}
+
+	to {
+		width: 15rem;
+	}
+}
+
+.header.darkTheme {
+	background: #333;
 	box-shadow: 0 0 15px rgba(255, 255, 255, 0.75);
+
+	& .linksContainer {
+		@media (max-width: 600px) {
+			color: black;
+			background: #555;
+		}
+	}
+
+	& .menuBtn {
+		border-color: white;
+
+		& div {
+			background: white;
+
+			&::before,
+			&::after {
+				background: white;
+			}
+		}
+	}
 }
