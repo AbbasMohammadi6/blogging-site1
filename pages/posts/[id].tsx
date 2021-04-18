@@ -129,21 +129,25 @@ export default function PostScreen({ id, body, title, comments }: Props) {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-	await dbConnect();
-	const posts: IPost[] = await Post.find({});
-	const paths = posts.map((post) => {
-		return {
-			params: {
-				// I expected post._id to be a string but it was an object???
-				id: post._id.toString(),
-			},
-		};
-	});
+	try {
+		await dbConnect();
+		const posts: IPost[] = await Post.find({});
+		const paths = posts.map((post) => {
+			return {
+				params: {
+					// I expected post._id to be a string but it was an object???
+					id: post._id.toString(),
+				},
+			};
+		});
 
-	return {
-		paths,
-		fallback: false,
-	};
+		return {
+			paths,
+			fallback: false,
+		};
+	} catch (e) {
+		console.log(e);
+	}
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
