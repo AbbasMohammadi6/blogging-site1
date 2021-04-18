@@ -1,7 +1,7 @@
 import React, { ComponentType } from "react";
 import "../styles/globals.css";
 import { Provider } from "react-redux";
-import store from "sotre/store";
+import store from "store/store";
 import { AppInitialProps } from "next/app";
 
 function MyApp({
