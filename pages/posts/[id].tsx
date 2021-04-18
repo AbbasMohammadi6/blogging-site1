@@ -13,6 +13,7 @@ import styles from "styles/Post.module.scss";
 import Modal from "components/Modal";
 import LoaderSpinner from "components/LoaderSpinner";
 import { convertDateToShamsi } from "utils/helpers";
+import User from "models/userModel";
 
 interface Props {
 	id: string;
@@ -151,6 +152,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 	let post: IPost;
 
 	try {
+		const users = await User.find({});
+
 		post = await Post.findById(params.id as string)
 			.populate("owner", "name _id")
 			.populate("comments.owner", "name _id");
