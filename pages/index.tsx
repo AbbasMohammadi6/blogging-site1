@@ -13,6 +13,8 @@ import Post, { IPost } from "models/postModel";
 import { getFirstImgAndPar, convertDateToShamsi } from "utils/helpers";
 import styles from "styles/homepage.module.scss";
 import Layout from "components/Layout";
+import Showcase from "components/Showcase";
+import PopluarPosts from "components/PopluarPosts";
 
 export default function Home({
 	posts,
@@ -27,33 +29,46 @@ export default function Home({
 		<>
 			<Header />
 			<Layout>
-				{error ? (
-					<h1>{error}</h1>
-				) : (
-					<>
-						{posts.map((article, idx) => (
-							<div className={styles.card} key={idx}>
-								<h1>
-									<Link href={`/posts/${article._id}`}>
-										<a>{article.title}</a>
-									</Link>
-								</h1>
+				<Showcase />
 
-								<small>
-									نویسنده: {/* @ts-ignore */}
-									<Link href={`/users/${article.owner._id}`}>
-										<a>{article.owner.name}</a>
-									</Link>{" "}
-									در {convertDateToShamsi(article.createdAt)}
-								</small>
+				<main className={styles.main}>
+					<section className={styles.newest}>
+						{error ? (
+							<h1>{error}</h1>
+						) : (
+							<>
+								<h1>تازه‌ترین‌ها</h1>
 
-								<div className={styles.main}>
-									{htmr(getFirstImgAndPar(article.body))}
-								</div>
-							</div>
-						))}
-					</>
-				)}
+								{posts.map((article, idx) => (
+									<div className={styles.card} key={idx}>
+										<h2>
+											<Link href={`/posts/${article._id}`}>
+												<a>{article.title}</a>
+											</Link>
+										</h2>
+
+										<small>
+											نویسنده: {/* @ts-ignore */}
+											<Link href={`/users/${article.owner._id}`}>
+												<a>{article.owner.name}</a>
+											</Link>{" "}
+											در {convertDateToShamsi(article.createdAt)}
+										</small>
+
+										<div className={styles.imgAndPar}>
+											{htmr(getFirstImgAndPar(article.body))}
+										</div>
+									</div>
+								))}
+							</>
+						)}
+					</section>
+
+					<aside className={styles.sidebar}>
+						<PopluarPosts posts={posts} title="محبوب‌ترین‌ها" />
+						<PopluarPosts posts={posts} title="پربحث‌ترین‌ها" />
+					</aside>
+				</main>
 			</Layout>
 		</>
 	);

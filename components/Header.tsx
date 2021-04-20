@@ -26,7 +26,7 @@ const Header = () => {
 		>
 			<nav>
 				<Link href="/">
-					<a className={styles.brand}>بلاگ</a>
+					<a className={styles.brand}>تار نوشت</a>
 				</Link>
 
 				<div className={styles.linksContainer}>

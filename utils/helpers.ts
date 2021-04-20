@@ -1,4 +1,4 @@
-export const getFirstImgAndPar = (html: string) => {
+export const getFirstImg = (html: string): string => {
 	const firstLetter = html.indexOf("<img");
 
 	let secondLetter;
@@ -10,20 +10,19 @@ export const getFirstImgAndPar = (html: string) => {
 		}
 	}
 
-	const image = html.slice(firstLetter, secondLetter);
+	return html.slice(firstLetter, secondLetter);
+};
 
-	///////////////////////
-
+export const getFirstPar = (html: string): string => {
 	const firstPar = html
 		.slice(html.search("<p>") + 3, html.search("</p>"))
 		.split(" ");
 
-	const whatWeWantToShow = (firstPar.length <= 50
-		? firstPar
-		: firstPar.slice(0, 50)
-	).join(" ");
+	return (firstPar.length <= 50 ? firstPar : firstPar.slice(0, 50)).join(" ");
+};
 
-	return `<p>${whatWeWantToShow}...</p> <div>${image}</div>`;
+export const getFirstImgAndPar = (html: string): string => {
+	return `<p>${getFirstPar(html)}...</p> <div>${getFirstImg(html)}</div>`;
 };
 
 export const convertDateToShamsi = (date: any) => {
