@@ -12,8 +12,8 @@ const handler = async (
 ) => {
 	const {
 		method,
-		body: { text },
-		query: { id },
+		body: { text, id },
+		// query: { id },
 	} = req;
 
 	switch (method) {
@@ -23,8 +23,10 @@ const handler = async (
 			if (!text)
 				return res.status(400).json({ message: "متن کامنت خالی است." });
 
-			if (!mongoose.Types.ObjectId.isValid)
+			if (!mongoose.Types.ObjectId.isValid(id as string))
 				return res.status(400).json({ message: "id is not valid" });
+
+			console.log("HERE", id);
 
 			try {
 				const post: IPost = await Post.findById(id);
@@ -41,6 +43,7 @@ const handler = async (
 
 				return res.status(201).json(commentedPost);
 			} catch (e) {
+				console.log(e);
 				return res.status(500).json({
 					message: "مشکلی برای سرور رخ داده است، لطفاً دوباره امتحان کنید.",
 				});

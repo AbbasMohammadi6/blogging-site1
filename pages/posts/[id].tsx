@@ -27,7 +27,7 @@ interface Props {
 	}[];
 }
 
-export default function PostScreen({ id, body, title, comments }: Props) {
+export default function PostScreen({ _id, body, title, comments }: Props) {
 	const [comment, setComment] = useState("");
 
 	const [modal, setModal] = useState<{ isOpen: boolean; message: string }>({
@@ -56,7 +56,7 @@ export default function PostScreen({ id, body, title, comments }: Props) {
 				message: "شما هنوز نظری وارد نکرده‌اید.",
 			});
 
-		dispatch(addComment({ text: comment, id }));
+		dispatch(addComment({ text: comment, id: _id }));
 	};
 
 	const closeModal = () => {

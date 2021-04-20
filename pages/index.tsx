@@ -85,7 +85,9 @@ export const getStaticProps: GetStaticProps = async () => {
 		const users = await User.find({});
 
 		// by doing "name email", we are saying that we don't want the it to send the password
-		const posts: IPost[] = await Post.find({}).populate("owner", "name email");
+		const posts: IPost[] = await Post.find({})
+			.populate("owner", "name email")
+			.sort({ createdAt: -1 });
 
 		// This seems to prevent the serializable error
 		const newNewPosts = JSON.parse(JSON.stringify(posts));
