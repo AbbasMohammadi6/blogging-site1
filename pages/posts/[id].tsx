@@ -16,7 +16,7 @@ import { convertDateToShamsi } from "utils/helpers";
 import User from "models/userModel";
 
 interface Props {
-	id: string;
+	_id: string;
 	body: string;
 	title: string;
 	comments: {
