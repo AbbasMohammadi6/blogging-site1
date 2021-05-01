@@ -15,6 +15,7 @@ import styles from "styles/homepage.module.scss";
 import Layout from "components/Layout";
 import Showcase from "components/Showcase";
 import PopluarPosts from "components/PopluarPosts";
+import Toast from "components/Toast";
 
 export default function Home({
 	posts,
@@ -68,6 +69,8 @@ export default function Home({
 						<PopluarPosts posts={posts} title="محبوب‌ترین‌ها" />
 						<PopluarPosts posts={posts} title="پربحث‌ترین‌ها" />
 					</aside>
+
+					<Toast />
 				</main>
 			</Layout>
 		</>

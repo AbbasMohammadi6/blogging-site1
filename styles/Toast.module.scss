@@ -1,0 +1,49 @@
+.main {
+	position: fixed;
+	left: 1rem;
+	bottom: 1rem;
+	background: transparentize(skyblue, 0.5%);
+	font-size: 0.7rem;
+	font-weight: 400;
+	padding: 1rem;
+	line-height: 1.3rem;
+	text-align: center;
+	display: block;
+	z-index: 100;
+	animation: slideup 1s;
+
+	&.close {
+		display: none;
+	}
+
+	& a {
+		text-decoration: underline;
+		transition: color 200ms;
+
+		&:hover {
+			color: red;
+		}
+	}
+
+	& i {
+		position: absolute;
+		top: 0;
+		right: 0;
+		padding: 5px;
+
+		&:hover {
+			cursor: pointer;
+			color: red;
+		}
+	}
+}
+
+@keyframes slideup {
+	from {
+		transform: translateY(10rem);
+	}
+
+	to {
+		transform: translateY(0);
+	}
+}
